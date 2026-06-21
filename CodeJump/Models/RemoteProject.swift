@@ -2,6 +2,8 @@ import Foundation
 import SwiftUI
 
 struct RemoteProject: Codable, Identifiable, Equatable {
+    static let localHostTag = "__local__"
+
     var id: UUID
     var name: String
     var host: String
@@ -91,6 +93,10 @@ final class ProjectStore: ObservableObject {
         didSet { save() }
     }
 
+    @Published var groups: [String] {
+        didSet { saveGroups() }
+    }
+
     @Published var collapsedGroups: Set<String> {
         didSet {
             if let data = try? JSONEncoder().encode(collapsedGroups) {
@@ -102,6 +108,7 @@ final class ProjectStore: ObservableObject {
     @Published var showHidden: Bool = false
 
     private let key = "saved_projects_v1"
+    private let groupsKey = "project_groups_v1"
 
     private init() {
         if let data = UserDefaults.standard.data(forKey: key),
@@ -111,11 +118,29 @@ final class ProjectStore: ObservableObject {
             projects = []
         }
 
+        if let data = UserDefaults.standard.data(forKey: groupsKey),
+           let decoded = try? JSONDecoder().decode([String].self, from: data) {
+            groups = decoded
+        } else {
+            groups = ["Default"]
+        }
+
         if let data = UserDefaults.standard.data(forKey: "collapsedGroups"),
            let decoded = try? JSONDecoder().decode(Set<String>.self, from: data) {
             collapsedGroups = decoded
         } else {
             collapsedGroups = []
+        }
+
+        let projectGroups = Set(projects.map(\.group))
+        for g in projectGroups where !groups.contains(g) {
+            groups.append(g)
+        }
+    }
+
+    private func saveGroups() {
+        if let data = try? JSONEncoder().encode(groups) {
+            UserDefaults.standard.set(data, forKey: groupsKey)
         }
     }
 
@@ -167,11 +192,53 @@ final class ProjectStore: ObservableObject {
         if let idx = projects.firstIndex(where: { $0.id == project.id }) {
             projects[idx].group = group
         }
+        if !groups.contains(group) {
+            groups.append(group)
+        }
+    }
+
+    func addGroup(_ name: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespaces)
+        if !trimmed.isEmpty && trimmed != "Favorites" && !groups.contains(trimmed) {
+            groups.append(trimmed)
+        }
+    }
+
+    func removeGroup(_ name: String) {
+        guard name != "Default" else { return }
+        var updated = projects
+        for i in updated.indices where updated[i].group == name {
+            updated[i].group = "Default"
+        }
+        projects = updated
+        groups.removeAll { $0 == name }
+        collapsedGroups.remove(name)
+    }
+
+    func renameGroup(from oldName: String, to newName: String) {
+        let trimmed = newName.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty, oldName != trimmed, trimmed != "Favorites" else { return }
+        guard !groups.contains(trimmed) else { return }
+        var updated = projects
+        for i in updated.indices where updated[i].group == oldName {
+            updated[i].group = trimmed
+        }
+        projects = updated
+        if let idx = groups.firstIndex(of: oldName) {
+            groups[idx] = trimmed
+        }
+        if collapsedGroups.remove(oldName) != nil {
+            collapsedGroups.insert(trimmed)
+        }
     }
 
     var allGroups: [String] {
-        let groups = Set(projects.map(\.group))
-        return groups.sorted()
+        var result = groups
+        let projectGroups = Set(projects.map(\.group))
+        for g in projectGroups where !result.contains(g) {
+            result.append(g)
+        }
+        return result
     }
 
     var hiddenCount: Int {
@@ -204,7 +271,7 @@ final class ProjectStore: ObservableObject {
         }
 
         let grouped = Dictionary(grouping: nonFavorites, by: \.group)
-        for groupName in grouped.keys.sorted() {
+        for groupName in allGroups {
             if let items = grouped[groupName], !items.isEmpty {
                 result.append(GroupedProjects(id: groupName, name: groupName, projects: items))
             }

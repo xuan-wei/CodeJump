@@ -10,6 +10,7 @@ final class UpdateChecker: ObservableObject {
     @Published var hasUpdate = false
     @Published var releaseURL: URL?
     @Published var isChecking = false
+    @Published var lastCheckResult: String?
 
     @AppStorage("lastUpdateCheck") private var lastCheck: Double = 0
     @AppStorage("skippedVersion") private var skippedVersion: String = ""
@@ -35,6 +36,7 @@ final class UpdateChecker: ObservableObject {
 
     func checkNow() {
         skippedVersion = ""
+        lastCheckResult = nil
         Task { await check(manual: true) }
     }
 
@@ -69,8 +71,13 @@ final class UpdateChecker: ObservableObject {
             let newer = isNewer(remote: remote, local: currentVersion)
             hasUpdate = newer && (manual || remote != skippedVersion)
             lastCheck = Date().timeIntervalSince1970
+            if manual && !hasUpdate {
+                lastCheckResult = "You're up to date (v\(currentVersion))"
+            }
         } catch {
-            // Silently fail — update check is best-effort
+            if manual {
+                lastCheckResult = "Check failed — verify your network connection"
+            }
         }
     }
 

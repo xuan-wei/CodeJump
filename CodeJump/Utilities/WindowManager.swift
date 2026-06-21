@@ -1,9 +1,10 @@
 import SwiftUI
 import AppKit
 
-final class WindowManager {
+final class WindowManager: NSObject, NSWindowDelegate {
     static let shared = WindowManager()
     private var windows: [String: NSWindow] = [:]
+    private var windowIdMap: [ObjectIdentifier: String] = [:]
 
     func open<Content: View>(id: String, title: String, width: CGFloat, height: CGFloat, @ViewBuilder content: () -> Content) {
         if let existing = windows[id], existing.isVisible {
@@ -25,13 +26,26 @@ final class WindowManager {
         w.contentView = hostingView
         w.center()
         w.isReleasedWhenClosed = false
+        w.delegate = self
         w.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         windows[id] = w
+        windowIdMap[ObjectIdentifier(w)] = id
     }
 
     func close(id: String) {
-        windows[id]?.close()
+        if let w = windows[id] {
+            windowIdMap.removeValue(forKey: ObjectIdentifier(w))
+            w.close()
+        }
         windows[id] = nil
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        guard let w = notification.object as? NSWindow else { return }
+        let oid = ObjectIdentifier(w)
+        if let id = windowIdMap.removeValue(forKey: oid) {
+            windows.removeValue(forKey: id)
+        }
     }
 }

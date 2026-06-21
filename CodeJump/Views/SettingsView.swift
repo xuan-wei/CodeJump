@@ -8,6 +8,7 @@ struct SettingsView: View {
     @ObservedObject private var hostStore = HostStore.shared
     @ObservedObject private var configStore = SSHConfigStore.shared
     @ObservedObject private var updateChecker = UpdateChecker.shared
+    @ObservedObject private var projectStore = ProjectStore.shared
     @State private var selectedTab = 0
 
     var body: some View {
@@ -15,6 +16,7 @@ struct SettingsView: View {
             generalTab.tabItem { Label("General", systemImage: "gearshape") }.tag(0)
             editorsTab.tabItem { Label("Editors", systemImage: "terminal") }.tag(1)
             hostsTab.tabItem { Label("Hosts", systemImage: "network") }.tag(2)
+            groupsTab.tabItem { Label("Groups", systemImage: "folder") }.tag(3)
         }
         .frame(width: 540, height: 460)
         .onAppear {
@@ -68,6 +70,14 @@ struct SettingsView: View {
                         if let url = updateChecker.releaseURL {
                             Link("Download", destination: url)
                         }
+                    }
+                } else if let result = updateChecker.lastCheckResult {
+                    HStack {
+                        Image(systemName: result.hasPrefix("Check failed") ? "exclamationmark.triangle" : "checkmark.circle")
+                            .foregroundStyle(result.hasPrefix("Check failed") ? .orange : .green)
+                        Text(result)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
@@ -186,6 +196,28 @@ struct SettingsView: View {
         .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.04)))
     }
 
+    private var groupsTab: some View {
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Project Groups")
+                        .font(.headline)
+                    Text("Organize projects into groups. Groups persist even when empty.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    ForEach(projectStore.allGroups, id: \.self) { group in
+                        GroupManagementRow(group: group, projectStore: projectStore)
+                    }
+
+                    AddGroupRow(projectStore: projectStore)
+                        .padding(.top, 4)
+                }
+                .padding(12)
+            }
+        }
+    }
+
     private var includeBanner: some View {
         let isIncluded = hostStore.isIncludedAnywhere(configStore: configStore)
         return VStack(alignment: .leading, spacing: 4) {
@@ -228,15 +260,19 @@ struct SettingsView: View {
 struct SSHConfigFileRow: View {
     @Binding var config: SSHConfigFile
     @ObservedObject var configStore: SSHConfigStore
+    @State private var editName = ""
+    @State private var editPath = ""
 
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                TextField("Name", text: $config.name)
+                TextField("Name", text: $editName)
                     .font(.body)
-                TextField("Path", text: $config.path, prompt: Text("~/.ssh/config"))
+                    .onSubmit { commit() }
+                TextField("Path", text: $editPath, prompt: Text("~/.ssh/config"))
                     .font(.system(.caption, design: .monospaced))
                     .foregroundStyle(.secondary)
+                    .onSubmit { commit() }
             }
             Button(action: { configStore.remove(config) }) {
                 Image(systemName: "trash").foregroundStyle(.red)
@@ -245,6 +281,13 @@ struct SSHConfigFileRow: View {
             .disabled(configStore.configs.count <= 1)
         }
         .padding(.vertical, 4)
+        .onAppear { editName = config.name; editPath = config.path }
+        .onDisappear { commit() }
+    }
+
+    private func commit() {
+        if editName != config.name { config.name = editName }
+        if editPath != config.path { config.path = editPath }
     }
 }
 
@@ -300,12 +343,16 @@ struct CustomHostRow: View {
     @Binding var host: CustomHost
     @ObservedObject var hostStore: HostStore
     @State private var isExpanded = false
-    @State private var portText = ""
+    @State private var editName = ""
+    @State private var editHostName = ""
+    @State private var editPort = ""
+    @State private var editUser = ""
+    @State private var editIdentityFile = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Button(action: { isExpanded.toggle() }) {
+                Button(action: { if isExpanded { commitAll() }; isExpanded.toggle() }) {
                     Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
                         .font(.caption)
                 }
@@ -324,27 +371,47 @@ struct CustomHostRow: View {
             }
             if isExpanded {
                 VStack(spacing: 6) {
-                    TextField("Alias", text: $host.name)
-                    TextField("HostName", text: $host.hostName, prompt: Text("192.168.1.100 or example.com"))
+                    TextField("Alias", text: $editName)
+                        .onSubmit { commitAll() }
+                    TextField("HostName", text: $editHostName, prompt: Text("192.168.1.100 or example.com"))
+                        .onSubmit { commitAll() }
                     HStack {
                         Text("Port").frame(width: 80, alignment: .leading)
-                        TextField("22", text: $portText, prompt: Text("22"))
-                            .onChange(of: portText) { _, newValue in
-                                host.port = Int(newValue)
-                            }
+                        TextField("22", text: $editPort, prompt: Text("22"))
+                            .onSubmit { commitAll() }
                     }
-                    TextField("User", text: $host.user, prompt: Text("username"))
-                    TextField("IdentityFile", text: $host.identityFile, prompt: Text("~/.ssh/id_rsa"))
+                    TextField("User", text: $editUser, prompt: Text("username"))
+                        .onSubmit { commitAll() }
+                    TextField("IdentityFile", text: $editIdentityFile, prompt: Text("~/.ssh/id_rsa"))
+                        .onSubmit { commitAll() }
                 }
                 .textFieldStyle(.roundedBorder)
                 .padding(.leading, 16)
                 .padding(.top, 4)
-                .onAppear {
-                    portText = host.port.map(String.init) ?? ""
-                }
+                .onAppear { loadFields() }
+                .onDisappear { commitAll() }
             }
         }
         .padding(.vertical, 4)
+    }
+
+    private func loadFields() {
+        editName = host.name
+        editHostName = host.hostName
+        editPort = host.port.map(String.init) ?? ""
+        editUser = host.user
+        editIdentityFile = host.identityFile
+    }
+
+    private func commitAll() {
+        var changed = false
+        if editName != host.name { host.name = editName; changed = true }
+        if editHostName != host.hostName { host.hostName = editHostName; changed = true }
+        let newPort = Int(editPort)
+        if newPort != host.port { host.port = newPort; changed = true }
+        if editUser != host.user { host.user = editUser; changed = true }
+        if editIdentityFile != host.identityFile { host.identityFile = editIdentityFile; changed = true }
+        _ = changed
     }
 }
 
@@ -361,6 +428,80 @@ struct AddHostRow: View {
                     hostStore.add(CustomHost(name: trimmed))
                     name = ""
                 }
+            }
+            .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+        }
+    }
+}
+
+struct GroupManagementRow: View {
+    let group: String
+    @ObservedObject var projectStore: ProjectStore
+    @State private var isEditing = false
+    @State private var editedName = ""
+
+    private var projectCount: Int {
+        projectStore.projects.filter { $0.group == group }.count
+    }
+
+    var body: some View {
+        HStack {
+            Image(systemName: "folder.fill")
+                .foregroundStyle(.secondary)
+                .frame(width: 20)
+            if isEditing {
+                TextField("Group name", text: $editedName, onCommit: commitRename)
+                    .textFieldStyle(.roundedBorder)
+                Button("Save") { commitRename() }
+                    .controlSize(.small)
+                Button("Cancel") { isEditing = false }
+                    .controlSize(.small)
+            } else {
+                Text(group).font(.body)
+                Spacer()
+                Text("\(projectCount) project\(projectCount == 1 ? "" : "s")")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                if group != "Default" {
+                    Button(action: {
+                        editedName = group
+                        isEditing = true
+                    }) {
+                        Image(systemName: "pencil")
+                    }
+                    .buttonStyle(.borderless)
+                    Button(action: { projectStore.removeGroup(group) }) {
+                        Image(systemName: "trash").foregroundStyle(.red)
+                    }
+                    .buttonStyle(.borderless)
+                    .help("Delete group and move its projects to Default")
+                }
+            }
+        }
+        .padding(.vertical, 4)
+        .padding(.horizontal, 8)
+        .background(RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(0.04)))
+    }
+
+    private func commitRename() {
+        let trimmed = editedName.trimmingCharacters(in: .whitespaces)
+        if !trimmed.isEmpty && trimmed != group {
+            projectStore.renameGroup(from: group, to: trimmed)
+        }
+        isEditing = false
+    }
+}
+
+struct AddGroupRow: View {
+    @ObservedObject var projectStore: ProjectStore
+    @State private var name = ""
+
+    var body: some View {
+        HStack {
+            TextField("New group name", text: $name, prompt: Text("e.g. Work Projects"))
+            Button("Add") {
+                projectStore.addGroup(name)
+                name = ""
             }
             .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
         }

@@ -1,10 +1,20 @@
 import Foundation
+import AppKit
 
 enum ShellExecutor {
-    @discardableResult
-    static func openRemoteProject(_ project: RemoteProject) -> Bool {
+    struct OpenResult {
+        let success: Bool
+        let errorMessage: String?
+    }
+
+    static func openRemoteProject(_ project: RemoteProject) -> OpenResult {
+        let cliPath = project.editor.cliPath
+        guard FileManager.default.fileExists(atPath: cliPath) else {
+            return OpenResult(success: false, errorMessage: "Editor not found at \(cliPath)")
+        }
+
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: project.editor.cliPath)
+        process.executableURL = URL(fileURLWithPath: cliPath)
         let expandedPath = NSString(string: project.remotePath).expandingTildeInPath
         if project.isLocal {
             process.arguments = [expandedPath]
@@ -16,18 +26,27 @@ enum ShellExecutor {
 
         do {
             try process.run()
-            return true
+            return OpenResult(success: true, errorMessage: nil)
         } catch {
-            return false
+            return OpenResult(success: false, errorMessage: error.localizedDescription)
         }
     }
 
+    private static func shellQuote(_ s: String) -> String {
+        if s.rangeOfCharacter(from: .init(charactersIn: " \t'\"\\$`!#&|;(){}[]<>?*~")) != nil {
+            let escaped = s.replacingOccurrences(of: "'", with: "'\\''")
+            return "'\(escaped)'"
+        }
+        return s
+    }
+
     static func commandString(for project: RemoteProject) -> String {
-        let expandedPath = NSString(string: project.remotePath).expandingTildeInPath
+        let cli = shellQuote(project.editor.cliPath)
         if project.isLocal {
-            return "\(project.editor.cliPath) \(expandedPath)"
+            let expandedPath = NSString(string: project.remotePath).expandingTildeInPath
+            return "\(cli) \(shellQuote(expandedPath))"
         } else {
-            return "\(project.editor.cliPath) --remote ssh-remote+\(project.host) \(project.remotePath)"
+            return "\(cli) --remote ssh-remote+\(project.host) \(shellQuote(project.remotePath))"
         }
     }
 }

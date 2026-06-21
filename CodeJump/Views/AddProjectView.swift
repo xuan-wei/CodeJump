@@ -8,8 +8,9 @@ struct AddProjectView: View {
     var editingProject: RemoteProject?
 
     @AppStorage("defaultEditorId") private var defaultEditorId = ""
+    @AppStorage("lastSelectedHost") private var lastSelectedHost = "__local__"
 
-    static let localTag = "__local__"
+    static let localTag = RemoteProject.localHostTag
 
     @State private var name = ""
     @State private var selectedHost = "__local__"
@@ -74,7 +75,9 @@ struct AddProjectView: View {
                             TextField("New group name", text: $newGroupName)
                             Button("Create") {
                                 if !newGroupName.trimmingCharacters(in: .whitespaces).isEmpty {
-                                    selectedGroup = newGroupName.trimmingCharacters(in: .whitespaces)
+                                    let trimmed = newGroupName.trimmingCharacters(in: .whitespaces)
+                                    projectStore.addGroup(trimmed)
+                                    selectedGroup = trimmed
                                     isCreatingNewGroup = false
                                     newGroupName = ""
                                 }
@@ -117,6 +120,7 @@ struct AddProjectView: View {
                 if let uuid = UUID(uuidString: defaultEditorId) {
                     selectedEditorId = uuid
                 }
+                selectedHost = lastSelectedHost
             }
         }
     }
@@ -127,6 +131,7 @@ struct AddProjectView: View {
         let hostName = local ? "" : selectedHost
         let displayHost = local ? "Local" : hostName
         let resolvedName = name.isEmpty ? RemoteProject.defaultName(host: displayHost, path: remotePath) : name
+        lastSelectedHost = selectedHost
         if var project = editingProject {
             project.name = resolvedName
             project.host = hostName

@@ -3,7 +3,7 @@ import SwiftUI
 struct HostPickerView: View {
     @Binding var selectedHost: String
     let hostGroups: [HostGroup]
-    static let localTag = "__local__"
+    static let localTag = RemoteProject.localHostTag
 
     @State private var isOpen = false
     @State private var hoveredHostName: String?

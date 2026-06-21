@@ -4,6 +4,7 @@ struct MainPanelView: View {
     @EnvironmentObject var projectStore: ProjectStore
     @ObservedObject private var updateChecker = UpdateChecker.shared
     @State private var searchText = ""
+    @FocusState private var isSearchFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -74,10 +75,12 @@ struct MainPanelView: View {
                 Image(systemName: "plus")
             }
             .buttonStyle(.borderless)
+            .accessibilityLabel("Add Project")
             Button(action: openSettings) {
                 Image(systemName: "gearshape")
             }
             .buttonStyle(.borderless)
+            .accessibilityLabel("Settings")
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
@@ -90,6 +93,7 @@ struct MainPanelView: View {
             TextField("Search projects...", text: $searchText)
                 .textFieldStyle(.plain)
                 .font(.system(size: 12))
+                .focused($isSearchFocused)
             if !searchText.isEmpty {
                 Button(action: { searchText = "" }) {
                     Image(systemName: "xmark.circle.fill")
@@ -101,6 +105,7 @@ struct MainPanelView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
         .background(Color.primary.opacity(0.04))
+        .onAppear { isSearchFocused = true }
     }
 
     private var emptyState: some View {

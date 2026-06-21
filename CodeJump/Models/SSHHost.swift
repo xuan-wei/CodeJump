@@ -70,11 +70,12 @@ final class HostStore: ObservableObject {
     @Published var customHosts: [CustomHost] {
         didSet {
             save()
-            writeManagedConfig()
+            scheduleWriteConfig()
         }
     }
 
     private let key = "custom_hosts_v1"
+    private var writeConfigTimer: Timer?
 
     private init() {
         if let data = UserDefaults.standard.data(forKey: key),
@@ -84,6 +85,13 @@ final class HostStore: ObservableObject {
             customHosts = []
         }
         writeManagedConfig()
+    }
+
+    private func scheduleWriteConfig() {
+        writeConfigTimer?.invalidate()
+        writeConfigTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            self?.writeManagedConfig()
+        }
     }
 
     private func save() {
@@ -160,9 +168,16 @@ final class HostStore: ObservableObject {
         let directive = Self.includeDirective + "\n"
         let existing = (try? String(contentsOfFile: expanded, encoding: .utf8)) ?? ""
         if existing.contains(Self.managedConfigPath) { return true }
+
+        let fm = FileManager.default
+        let originalPerms = try? fm.attributesOfItem(atPath: expanded)[.posixPermissions] as? Int
+
         let newContent = directive + "\n" + existing
         do {
             try newContent.write(toFile: expanded, atomically: true, encoding: .utf8)
+            if let perms = originalPerms {
+                try? fm.setAttributes([.posixPermissions: perms], ofItemAtPath: expanded)
+            }
             return true
         } catch {
             return false

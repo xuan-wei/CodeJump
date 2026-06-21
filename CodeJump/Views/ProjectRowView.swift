@@ -5,6 +5,8 @@ struct ProjectRowView: View {
     @EnvironmentObject var projectStore: ProjectStore
     @State private var isHovering = false
 
+    @State private var showDeleteConfirm = false
+
     var body: some View {
         Button(action: openProject) {
             HStack(spacing: 10) {
@@ -91,16 +93,44 @@ struct ProjectRowView: View {
                 Button("New Group...") { promptNewGroup() }
             }
             Divider()
+            Button("Duplicate") { duplicateProject() }
             Button("Edit...") { editProject() }
             Button("Copy Command") { copyCommand() }
             Divider()
+            Button("Delete", role: .destructive) { showDeleteConfirm = true }
+        }
+        .confirmationDialog("Delete \"\(project.name)\"?", isPresented: $showDeleteConfirm) {
             Button("Delete", role: .destructive) { projectStore.remove(project) }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This action cannot be undone.")
         }
     }
 
     private func openProject() {
-        ShellExecutor.openRemoteProject(project)
-        PanelManager.shared.hide()
+        let result = ShellExecutor.openRemoteProject(project)
+        if result.success {
+            PanelManager.shared.hide()
+        } else if let msg = result.errorMessage {
+            let alert = NSAlert()
+            alert.messageText = "Failed to Open Project"
+            alert.informativeText = msg
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+        }
+    }
+
+    private func duplicateProject() {
+        let copy = RemoteProject(
+            name: project.name + " (Copy)",
+            host: project.host,
+            remotePath: project.remotePath,
+            editorId: project.editorId,
+            group: project.group,
+            isLocal: project.isLocal
+        )
+        projectStore.add(copy)
     }
 
     private func editProject() {
@@ -127,6 +157,7 @@ struct ProjectRowView: View {
         if alert.runModal() == .alertFirstButtonReturn {
             let newGroup = input.stringValue.trimmingCharacters(in: .whitespaces)
             if !newGroup.isEmpty {
+                projectStore.addGroup(newGroup)
                 projectStore.setGroup(project, group: newGroup)
             }
         }

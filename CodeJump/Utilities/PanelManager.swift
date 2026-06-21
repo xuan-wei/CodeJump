@@ -71,6 +71,7 @@ final class PanelManager: ObservableObject {
         stopMonitoringClicks()
         monitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
             guard let self, let panel = self.panel, panel.isVisible else { return }
+            if NSApp.modalWindow != nil { return }
             let clickLocation = event.locationInWindow
             if let eventWindow = event.window {
                 let screenPoint = eventWindow.convertPoint(toScreen: clickLocation)
@@ -105,8 +106,8 @@ final class PanelManager: ObservableObject {
         var x = buttonFrame.origin.x + buttonFrame.size.width / 2 - panelFrame.size.width / 2
         let y = buttonFrame.origin.y - panelFrame.size.height
 
-        if let screen = NSScreen.main {
-            let screenFrame = screen.frame
+        let screen = buttonWindow.screen ?? NSScreen.main
+        if let screenFrame = screen?.frame {
             if x + panelFrame.size.width > screenFrame.maxX { x = screenFrame.maxX - panelFrame.size.width - 10 }
             if x < screenFrame.minX { x = screenFrame.minX + 10 }
         }
@@ -119,6 +120,7 @@ private class PanelDelegate: NSObject, NSWindowDelegate {
     static let shared = PanelDelegate()
 
     func windowDidResignKey(_ notification: Notification) {
+        if NSApp.modalWindow != nil { return }
         PanelManager.shared.hide()
     }
 
