@@ -1,0 +1,34 @@
+name: CodeJump
+options:
+  bundleIdPrefix: com.codejump
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  minimumXcodeGenVersion: "2.30"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    DEVELOPMENT_TEAM: ""
+
+targets:
+  CodeJump:
+    type: application
+    platform: macOS
+    sources:
+      - CodeJump
+    settings:
+      base:
+        INFOPLIST_FILE: CodeJump/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.codejump.app
+        PRODUCT_NAME: CodeJump
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: true
+    entitlements:
+      path: CodeJump/CodeJump.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+        com.apple.security.network.client: true

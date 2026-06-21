@@ -1,0 +1,401 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00BB914E568BFCAC225E6F38 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D209B88FFEEF6691BBB2D7 /* UpdateChecker.swift */; };
+		09A86A15A05F1B4730BC12AD /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ACE4B090FEB5FC0879EDEBD /* WindowManager.swift */; };
+		0FCE5492AF0C86F7EC54F3E8 /* HostPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A30E6DCDC47D1094BFDC9 /* HostPickerView.swift */; };
+		18219F07A9D9B6F9BA9CAAF4 /* CodeJumpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11207CE61BA3B769C4177815 /* CodeJumpApp.swift */; };
+		1CD5C518BAC419C18DB91B03 /* ShellExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C491D74D738FBDDB05F9CCF3 /* ShellExecutor.swift */; };
+		23665C903096675949A40F1E /* ProjectRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85CA4A05BF50A6BFFD2DEA0 /* ProjectRowView.swift */; };
+		247571A80B79C54B413C1F88 /* SSHConfigParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BEAE3690656189F412F9864 /* SSHConfigParser.swift */; };
+		2982DCE9FD51FCFE97BD932E /* RemoteProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1857744F870C1EDD9C4F6D /* RemoteProject.swift */; };
+		2B606AADC1E17A150C6CC23D /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2796BD39883CA20A6898C16E /* AddProjectView.swift */; };
+		46D33F2E87395677CB9C3E27 /* SSHConfigFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA5AF30019F8F38D1D06CBA /* SSHConfigFile.swift */; };
+		4890C31A674DB2BC08CCED17 /* Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EEBB4AE1F9771F75F89956 /* Editor.swift */; };
+		5205939300A14898A8158C4F /* MainPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7243335777466B470C5617 /* MainPanelView.swift */; };
+		9F5EBBF0939331B0CB2380A3 /* PanelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287AF3989D6A5F709BA16F1 /* PanelManager.swift */; };
+		AD902FFBF3AC5AA8CBA0414B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C93712BE87A74212567607AA /* Assets.xcassets */; };
+		DA3A43C8B178559BC9493C50 /* SSHHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DDB1FDF3615930CDC5EE01 /* SSHHost.swift */; };
+		EA6F263DF2AD63B2116ADBF9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968541B5D5E6A4424985B8F /* SettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0F1857744F870C1EDD9C4F6D /* RemoteProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteProject.swift; sourceTree = "<group>"; };
+		11207CE61BA3B769C4177815 /* CodeJumpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeJumpApp.swift; sourceTree = "<group>"; };
+		17DDB1FDF3615930CDC5EE01 /* SSHHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHHost.swift; sourceTree = "<group>"; };
+		1FEA920F4DB70FABEF729B67 /* CodeJump.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CodeJump.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2796BD39883CA20A6898C16E /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
+		2D7243335777466B470C5617 /* MainPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPanelView.swift; sourceTree = "<group>"; };
+		33EEBB4AE1F9771F75F89956 /* Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Editor.swift; sourceTree = "<group>"; };
+		3AA5AF30019F8F38D1D06CBA /* SSHConfigFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHConfigFile.swift; sourceTree = "<group>"; };
+		4ACE4B090FEB5FC0879EDEBD /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		4BEAE3690656189F412F9864 /* SSHConfigParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHConfigParser.swift; sourceTree = "<group>"; };
+		6287AF3989D6A5F709BA16F1 /* PanelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelManager.swift; sourceTree = "<group>"; };
+		847A24CEC0E31E254E57F777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9968541B5D5E6A4424985B8F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B0D209B88FFEEF6691BBB2D7 /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
+		C41A30E6DCDC47D1094BFDC9 /* HostPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostPickerView.swift; sourceTree = "<group>"; };
+		C491D74D738FBDDB05F9CCF3 /* ShellExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellExecutor.swift; sourceTree = "<group>"; };
+		C85CA4A05BF50A6BFFD2DEA0 /* ProjectRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRowView.swift; sourceTree = "<group>"; };
+		C93712BE87A74212567607AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EC7F86CF2679EC8573274720 /* CodeJump.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CodeJump.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		43A7AA171D65D231E2FEA396 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				33EEBB4AE1F9771F75F89956 /* Editor.swift */,
+				0F1857744F870C1EDD9C4F6D /* RemoteProject.swift */,
+				3AA5AF30019F8F38D1D06CBA /* SSHConfigFile.swift */,
+				17DDB1FDF3615930CDC5EE01 /* SSHHost.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7A9F5E7AD563911D98E45866 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C491D74D738FBDDB05F9CCF3 /* ShellExecutor.swift */,
+				4BEAE3690656189F412F9864 /* SSHConfigParser.swift */,
+				B0D209B88FFEEF6691BBB2D7 /* UpdateChecker.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		8231898C480D0FAA80C5F035 = {
+			isa = PBXGroup;
+			children = (
+				D22AB257E3EBE192927E18A9 /* CodeJump */,
+				A9942C1B62DE0A92E1955F80 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A9942C1B62DE0A92E1955F80 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1FEA920F4DB70FABEF729B67 /* CodeJump.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AFB25DA50F463ED158BAE9BD /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				6287AF3989D6A5F709BA16F1 /* PanelManager.swift */,
+				4ACE4B090FEB5FC0879EDEBD /* WindowManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		D22AB257E3EBE192927E18A9 /* CodeJump */ = {
+			isa = PBXGroup;
+			children = (
+				C93712BE87A74212567607AA /* Assets.xcassets */,
+				EC7F86CF2679EC8573274720 /* CodeJump.entitlements */,
+				11207CE61BA3B769C4177815 /* CodeJumpApp.swift */,
+				847A24CEC0E31E254E57F777 /* Info.plist */,
+				43A7AA171D65D231E2FEA396 /* Models */,
+				7A9F5E7AD563911D98E45866 /* Services */,
+				AFB25DA50F463ED158BAE9BD /* Utilities */,
+				E27E070553795A6E3671C367 /* Views */,
+			);
+			path = CodeJump;
+			sourceTree = "<group>";
+		};
+		E27E070553795A6E3671C367 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2796BD39883CA20A6898C16E /* AddProjectView.swift */,
+				C41A30E6DCDC47D1094BFDC9 /* HostPickerView.swift */,
+				2D7243335777466B470C5617 /* MainPanelView.swift */,
+				C85CA4A05BF50A6BFFD2DEA0 /* ProjectRowView.swift */,
+				9968541B5D5E6A4424985B8F /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8903461F0D308ADBE97D1414 /* CodeJump */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B0A68C3F655050BB725F69D /* Build configuration list for PBXNativeTarget "CodeJump" */;
+			buildPhases = (
+				AA5DAD3F9CD88813E53780B2 /* Sources */,
+				D7FA3DBAEB0EACFFC574B302 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CodeJump;
+			packageProductDependencies = (
+			);
+			productName = CodeJump;
+			productReference = 1FEA920F4DB70FABEF729B67 /* CodeJump.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D3E8B70EB227F9540260BFDD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					8903461F0D308ADBE97D1414 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = C8B3D40848C2AF2D932D1CA3 /* Build configuration list for PBXProject "CodeJump" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8231898C480D0FAA80C5F035;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A9942C1B62DE0A92E1955F80 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8903461F0D308ADBE97D1414 /* CodeJump */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D7FA3DBAEB0EACFFC574B302 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD902FFBF3AC5AA8CBA0414B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA5DAD3F9CD88813E53780B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B606AADC1E17A150C6CC23D /* AddProjectView.swift in Sources */,
+				18219F07A9D9B6F9BA9CAAF4 /* CodeJumpApp.swift in Sources */,
+				4890C31A674DB2BC08CCED17 /* Editor.swift in Sources */,
+				0FCE5492AF0C86F7EC54F3E8 /* HostPickerView.swift in Sources */,
+				5205939300A14898A8158C4F /* MainPanelView.swift in Sources */,
+				9F5EBBF0939331B0CB2380A3 /* PanelManager.swift in Sources */,
+				23665C903096675949A40F1E /* ProjectRowView.swift in Sources */,
+				2982DCE9FD51FCFE97BD932E /* RemoteProject.swift in Sources */,
+				46D33F2E87395677CB9C3E27 /* SSHConfigFile.swift in Sources */,
+				247571A80B79C54B413C1F88 /* SSHConfigParser.swift in Sources */,
+				DA3A43C8B178559BC9493C50 /* SSHHost.swift in Sources */,
+				EA6F263DF2AD63B2116ADBF9 /* SettingsView.swift in Sources */,
+				1CD5C518BAC419C18DB91B03 /* ShellExecutor.swift in Sources */,
+				00BB914E568BFCAC225E6F38 /* UpdateChecker.swift in Sources */,
+				09A86A15A05F1B4730BC12AD /* WindowManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2902FC9180068C2D82E85ED9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		7707553EC4A2885E85668BD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CodeJump/CodeJump.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = CodeJump/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.codejump.app;
+				PRODUCT_NAME = CodeJump;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		95684CA6BEF458B2C812088B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CodeJump/CodeJump.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = CodeJump/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.codejump.app;
+				PRODUCT_NAME = CodeJump;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B41612C4BC41D21008E29515 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6B0A68C3F655050BB725F69D /* Build configuration list for PBXNativeTarget "CodeJump" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7707553EC4A2885E85668BD7 /* Debug */,
+				95684CA6BEF458B2C812088B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C8B3D40848C2AF2D932D1CA3 /* Build configuration list for PBXProject "CodeJump" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2902FC9180068C2D82E85ED9 /* Debug */,
+				B41612C4BC41D21008E29515 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D3E8B70EB227F9540260BFDD /* Project object */;
+}
