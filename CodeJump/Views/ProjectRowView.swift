@@ -24,9 +24,16 @@ struct ProjectRowView: View {
                 .frame(width: 24)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(project.name)
-                        .font(.system(.body, weight: .medium))
-                        .lineLimit(1)
+                    HStack(spacing: 6) {
+                        Text(project.name)
+                            .font(.system(.body, weight: .medium))
+                            .lineLimit(1)
+                        if let timeAgo = RemoteProject.relativeTime(from: project.lastUsedAt) {
+                            Text(timeAgo)
+                                .font(.caption2)
+                                .foregroundStyle(.quaternary)
+                        }
+                    }
                     HStack(spacing: 4) {
                         Text(project.editor.name)
                             .font(.caption2)
@@ -110,6 +117,7 @@ struct ProjectRowView: View {
     private func openProject() {
         let result = ShellExecutor.openRemoteProject(project)
         if result.success {
+            projectStore.recordUsage(project)
             PanelManager.shared.hide()
         } else if let msg = result.errorMessage {
             let alert = NSAlert()

@@ -67,20 +67,47 @@ struct MainPanelView: View {
     }
 
     private var header: some View {
-        HStack {
-            Text("CodeJump")
-                .font(.headline)
-            Spacer()
-            Button(action: openAddProject) {
-                Image(systemName: "plus")
+        VStack(spacing: 6) {
+            HStack {
+                Text("CodeJump")
+                    .font(.headline)
+                Spacer()
+                Button(action: openAddProject) {
+                    Image(systemName: "plus")
+                }
+                .buttonStyle(.borderless)
+                .accessibilityLabel("Add Project")
+                Button(action: openSettings) {
+                    Image(systemName: "gearshape")
+                }
+                .buttonStyle(.borderless)
+                .accessibilityLabel("Settings")
             }
-            .buttonStyle(.borderless)
-            .accessibilityLabel("Add Project")
-            Button(action: openSettings) {
-                Image(systemName: "gearshape")
+            HStack(spacing: 4) {
+                ForEach(SortMode.allCases, id: \.self) { mode in
+                    Button {
+                        projectStore.sortMode = mode
+                    } label: {
+                        HStack(spacing: 3) {
+                            Image(systemName: mode.iconName)
+                                .font(.system(size: 9))
+                            Text(mode.label)
+                                .font(.system(size: 10, weight: .medium))
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(mode == projectStore.sortMode
+                                      ? Color.accentColor.opacity(0.15)
+                                      : Color.primary.opacity(0.04))
+                        )
+                        .foregroundStyle(mode == projectStore.sortMode ? .primary : .secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+                Spacer()
             }
-            .buttonStyle(.borderless)
-            .accessibilityLabel("Settings")
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
@@ -173,9 +200,13 @@ struct MainPanelView: View {
             .buttonStyle(.plain)
 
             if !isCollapsed {
-                ForEach(group.projects) { project in
-                    ProjectRowView(project: project)
-                        .environmentObject(projectStore)
+                let isManual = projectStore.sortMode == .manual
+                ForEach(Array(group.projects.enumerated()), id: \.element.id) { index, project in
+                    DroppableRow(project: project, groupName: group.name,
+                                 insertionIndex: index, isManual: isManual)
+                }
+                if isManual && !group.projects.isEmpty {
+                    DropTailZone(groupName: group.name, insertionIndex: group.projects.count)
                 }
             }
         }
@@ -210,6 +241,81 @@ struct MainPanelView: View {
     private func openSettings() {
         WindowManager.shared.open(id: "settings", title: "CodeJump Settings", width: 540, height: 460) {
             SettingsView()
+        }
+    }
+}
+
+private struct DropIndicatorLine: View {
+    var body: some View {
+        HStack(spacing: 0) {
+            Circle()
+                .fill(Color.accentColor)
+                .frame(width: 6, height: 6)
+            Rectangle()
+                .fill(Color.accentColor)
+                .frame(height: 2)
+        }
+        .padding(.horizontal, 8)
+    }
+}
+
+private struct DroppableRow: View {
+    let project: RemoteProject
+    let groupName: String
+    let insertionIndex: Int
+    let isManual: Bool
+    @EnvironmentObject var projectStore: ProjectStore
+    @State private var isDropTargeted = false
+
+    var body: some View {
+        let row = ProjectRowView(project: project)
+            .overlay(alignment: .top) {
+                if isDropTargeted {
+                    DropIndicatorLine()
+                        .transition(.opacity)
+                }
+            }
+
+        if isManual {
+            row
+                .draggable(project.id.uuidString) {
+                    Text(project.name)
+                        .padding(6)
+                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 6))
+                }
+                .dropDestination(for: String.self) { items, _ in
+                    guard let id = items.first.flatMap(UUID.init) else { return false }
+                    projectStore.moveProject(id, beforeIndex: insertionIndex, inGroup: groupName)
+                    return true
+                } isTargeted: { targeted in
+                    withAnimation(.easeInOut(duration: 0.15)) { isDropTargeted = targeted }
+                }
+        } else {
+            row
+        }
+    }
+}
+
+private struct DropTailZone: View {
+    let groupName: String
+    let insertionIndex: Int
+    @EnvironmentObject var projectStore: ProjectStore
+    @State private var isTargeted = false
+
+    var body: some View {
+        ZStack {
+            Color.clear.frame(height: 20)
+            if isTargeted {
+                DropIndicatorLine()
+            }
+        }
+        .contentShape(Rectangle())
+        .dropDestination(for: String.self) { items, _ in
+            guard let id = items.first.flatMap(UUID.init) else { return false }
+            projectStore.moveProject(id, beforeIndex: insertionIndex, inGroup: groupName)
+            return true
+        } isTargeted: { targeted in
+            withAnimation(.easeInOut(duration: 0.15)) { isTargeted = targeted }
         }
     }
 }

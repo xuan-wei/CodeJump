@@ -13,12 +13,13 @@ struct RemoteProject: Codable, Identifiable, Equatable {
     var isFavorite: Bool
     var isHidden: Bool
     var isLocal: Bool
+    var lastUsedAt: Date?
 
     var editor: Editor {
         EditorStore.shared.editor(for: editorId) ?? Editor.builtinCursor
     }
 
-    init(id: UUID = UUID(), name: String = "", host: String, remotePath: String, editorId: UUID, group: String = "Default", isFavorite: Bool = false, isHidden: Bool = false, isLocal: Bool = false) {
+    init(id: UUID = UUID(), name: String = "", host: String, remotePath: String, editorId: UUID, group: String = "Default", isFavorite: Bool = false, isHidden: Bool = false, isLocal: Bool = false, lastUsedAt: Date? = nil) {
         self.id = id
         self.name = name.isEmpty ? Self.defaultName(host: host, path: remotePath) : name
         self.host = host
@@ -28,6 +29,19 @@ struct RemoteProject: Codable, Identifiable, Equatable {
         self.isFavorite = isFavorite
         self.isHidden = isHidden
         self.isLocal = isLocal
+        self.lastUsedAt = lastUsedAt
+    }
+
+    static func relativeTime(from date: Date?) -> String? {
+        guard let date = date else { return nil }
+        let seconds = Int(-date.timeIntervalSinceNow)
+        if seconds < 60 { return "Just now" }
+        let minutes = seconds / 60
+        if minutes < 60 { return "\(minutes)m ago" }
+        let hours = minutes / 60
+        if hours < 24 { return "\(hours)h ago" }
+        let days = hours / 24
+        return "\(days)d ago"
     }
 
     static func defaultName(host: String, path: String) -> String {
@@ -36,7 +50,7 @@ struct RemoteProject: Codable, Identifiable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, name, host, remotePath, editorId, group, isFavorite, isHidden, isLocal
+        case id, name, host, remotePath, editorId, group, isFavorite, isHidden, isLocal, lastUsedAt
         case editor
     }
 
@@ -63,6 +77,7 @@ struct RemoteProject: Codable, Identifiable, Equatable {
         isFavorite = try c.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
         isHidden = try c.decodeIfPresent(Bool.self, forKey: .isHidden) ?? false
         isLocal = try c.decodeIfPresent(Bool.self, forKey: .isLocal) ?? false
+        lastUsedAt = try c.decodeIfPresent(Date.self, forKey: .lastUsedAt)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -76,6 +91,7 @@ struct RemoteProject: Codable, Identifiable, Equatable {
         try c.encode(isFavorite, forKey: .isFavorite)
         try c.encode(isHidden, forKey: .isHidden)
         try c.encode(isLocal, forKey: .isLocal)
+        try c.encodeIfPresent(lastUsedAt, forKey: .lastUsedAt)
     }
 }
 
@@ -84,6 +100,28 @@ struct GroupedProjects: Identifiable {
     let name: String
     let projects: [RemoteProject]
     var isFavoriteGroup: Bool { name == "Favorites" }
+}
+
+enum SortMode: String, Codable, CaseIterable {
+    case manual
+    case name
+    case lastUsed
+
+    var label: String {
+        switch self {
+        case .manual: return "Manual"
+        case .name: return "By Name"
+        case .lastUsed: return "Last Used"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .manual: return "hand.draw"
+        case .name: return "textformat.abc"
+        case .lastUsed: return "clock"
+        }
+    }
 }
 
 final class ProjectStore: ObservableObject {
@@ -102,6 +140,12 @@ final class ProjectStore: ObservableObject {
             if let data = try? JSONEncoder().encode(collapsedGroups) {
                 UserDefaults.standard.set(data, forKey: "collapsedGroups")
             }
+        }
+    }
+
+    @Published var sortMode: SortMode {
+        didSet {
+            UserDefaults.standard.set(sortMode.rawValue, forKey: "sortMode")
         }
     }
 
@@ -132,6 +176,13 @@ final class ProjectStore: ObservableObject {
             collapsedGroups = []
         }
 
+        if let raw = UserDefaults.standard.string(forKey: "sortMode"),
+           let mode = SortMode(rawValue: raw) {
+            sortMode = mode
+        } else {
+            sortMode = .manual
+        }
+
         let projectGroups = Set(projects.map(\.group))
         for g in projectGroups where !groups.contains(g) {
             groups.append(g)
@@ -147,6 +198,12 @@ final class ProjectStore: ObservableObject {
     private func save() {
         if let data = try? JSONEncoder().encode(projects) {
             UserDefaults.standard.set(data, forKey: key)
+        }
+    }
+
+    private func mutateProject(_ id: UUID, _ body: (inout RemoteProject) -> Void) {
+        if let idx = projects.firstIndex(where: { $0.id == id }) {
+            body(&projects[idx])
         }
     }
 
@@ -168,16 +225,36 @@ final class ProjectStore: ObservableObject {
         projects.move(fromOffsets: source, toOffset: destination)
     }
 
-    func toggleFavorite(_ project: RemoteProject) {
-        if let idx = projects.firstIndex(where: { $0.id == project.id }) {
-            projects[idx].isFavorite.toggle()
+    func recordUsage(_ project: RemoteProject) {
+        mutateProject(project.id) { $0.lastUsedAt = Date() }
+    }
+
+    func moveProject(_ projectId: UUID, beforeIndex insertionIndex: Int, inGroup groupName: String) {
+        guard let sourceIdx = projects.firstIndex(where: { $0.id == projectId }) else { return }
+
+        var updated = projects
+        let moving = updated.remove(at: sourceIdx)
+
+        let groupIndices = updated.indices.filter {
+            updated[$0].group == groupName && !updated[$0].isFavorite
         }
+
+        let destIdx: Int
+        if insertionIndex >= groupIndices.count {
+            destIdx = (groupIndices.last.map { $0 + 1 }) ?? updated.endIndex
+        } else {
+            destIdx = groupIndices[insertionIndex]
+        }
+        updated.insert(moving, at: destIdx)
+        projects = updated
+    }
+
+    func toggleFavorite(_ project: RemoteProject) {
+        mutateProject(project.id) { $0.isFavorite.toggle() }
     }
 
     func toggleHidden(_ project: RemoteProject) {
-        if let idx = projects.firstIndex(where: { $0.id == project.id }) {
-            projects[idx].isHidden.toggle()
-        }
+        mutateProject(project.id) { $0.isHidden.toggle() }
     }
 
     func toggleGroup(_ group: String) {
@@ -189,9 +266,7 @@ final class ProjectStore: ObservableObject {
     }
 
     func setGroup(_ project: RemoteProject, group: String) {
-        if let idx = projects.firstIndex(where: { $0.id == project.id }) {
-            projects[idx].group = group
-        }
+        mutateProject(project.id) { $0.group = group }
         if !groups.contains(group) {
             groups.append(group)
         }
@@ -232,14 +307,7 @@ final class ProjectStore: ObservableObject {
         }
     }
 
-    var allGroups: [String] {
-        var result = groups
-        let projectGroups = Set(projects.map(\.group))
-        for g in projectGroups where !result.contains(g) {
-            result.append(g)
-        }
-        return result
-    }
+    var allGroups: [String] { groups }
 
     var hiddenCount: Int {
         projects.filter(\.isHidden).count
@@ -273,10 +341,21 @@ final class ProjectStore: ObservableObject {
         let grouped = Dictionary(grouping: nonFavorites, by: \.group)
         for groupName in allGroups {
             if let items = grouped[groupName], !items.isEmpty {
-                result.append(GroupedProjects(id: groupName, name: groupName, projects: items))
+                result.append(GroupedProjects(id: groupName, name: groupName, projects: sortedItems(items)))
             }
         }
 
         return result
+    }
+
+    private func sortedItems(_ items: [RemoteProject]) -> [RemoteProject] {
+        switch sortMode {
+        case .manual:
+            return items
+        case .name:
+            return items.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .lastUsed:
+            return items.sorted { ($0.lastUsedAt ?? .distantPast) > ($1.lastUsedAt ?? .distantPast) }
+        }
     }
 }

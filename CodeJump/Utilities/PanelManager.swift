@@ -42,7 +42,7 @@ final class PanelManager: ObservableObject {
         p.isFloatingPanel = true
         p.level = .floating
         p.collectionBehavior = [.canJoinAllSpaces, .transient]
-        p.isMovableByWindowBackground = true
+        p.isMovableByWindowBackground = false
         p.contentView = hostingView
         p.contentMinSize = NSSize(width: width, height: 200)
         p.contentMaxSize = NSSize(width: width, height: 1200)

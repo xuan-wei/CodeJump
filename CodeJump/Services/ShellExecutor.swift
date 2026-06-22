@@ -19,7 +19,8 @@ enum ShellExecutor {
         if project.isLocal {
             process.arguments = [expandedPath]
         } else {
-            process.arguments = ["--remote", "ssh-remote+\(project.host)", project.remotePath]
+            let folderURI = "vscode-remote://ssh-remote+\(project.host)\(project.remotePath)"
+            process.arguments = ["--folder-uri", folderURI]
         }
         process.standardOutput = FileHandle.nullDevice
         process.standardError = FileHandle.nullDevice
@@ -46,7 +47,8 @@ enum ShellExecutor {
             let expandedPath = NSString(string: project.remotePath).expandingTildeInPath
             return "\(cli) \(shellQuote(expandedPath))"
         } else {
-            return "\(cli) --remote ssh-remote+\(project.host) \(shellQuote(project.remotePath))"
+            let folderURI = "vscode-remote://ssh-remote+\(project.host)\(project.remotePath)"
+            return "\(cli) --folder-uri \(shellQuote(folderURI))"
         }
     }
 }
