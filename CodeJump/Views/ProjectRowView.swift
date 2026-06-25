@@ -5,8 +5,6 @@ struct ProjectRowView: View {
     @EnvironmentObject var projectStore: ProjectStore
     @State private var isHovering = false
 
-    @State private var showDeleteConfirm = false
-
     var body: some View {
         Button(action: openProject) {
             HStack(spacing: 10) {
@@ -104,13 +102,7 @@ struct ProjectRowView: View {
             Button("Edit...") { editProject() }
             Button("Copy Command") { copyCommand() }
             Divider()
-            Button("Delete", role: .destructive) { showDeleteConfirm = true }
-        }
-        .confirmationDialog("Delete \"\(project.name)\"?", isPresented: $showDeleteConfirm) {
-            Button("Delete", role: .destructive) { projectStore.remove(project) }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("This action cannot be undone.")
+            Button("Delete", role: .destructive) { confirmDelete() }
         }
     }
 
@@ -144,6 +136,18 @@ struct ProjectRowView: View {
     private func editProject() {
         WindowManager.shared.open(id: "edit-\(project.id)", title: "Edit Project", width: 460, height: 400) {
             AddProjectView(projectStore: projectStore, editingProject: project)
+        }
+    }
+
+    private func confirmDelete() {
+        let alert = NSAlert()
+        alert.messageText = "Delete \"\(project.name)\"?"
+        alert.informativeText = "This action cannot be undone."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Delete")
+        alert.addButton(withTitle: "Cancel")
+        if alert.runModal() == .alertFirstButtonReturn {
+            projectStore.remove(project)
         }
     }
 
