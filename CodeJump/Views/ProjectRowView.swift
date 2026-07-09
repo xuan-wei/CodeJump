@@ -33,11 +33,16 @@ struct ProjectRowView: View {
                         }
                     }
                     HStack(spacing: 4) {
-                        Text(project.editor.name)
+                        Text(project.editor.name + " ▾")
                             .font(.caption2)
-                            .padding(.horizontal, 4)
-                            .padding(.vertical, 1)
-                            .background(Capsule().fill(Color.accentColor.opacity(0.12)))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1.5)
+                            .background(
+                                Capsule()
+                                    .fill(Color.accentColor.opacity(0.1))
+                                    .overlay(Capsule().strokeBorder(Color.accentColor.opacity(0.15), lineWidth: 0.5))
+                            )
+                            .onTapGesture { showEditorMenu() }
                         if project.isLocal {
                             Text("Local")
                                 .font(.caption)
@@ -139,6 +144,18 @@ struct ProjectRowView: View {
         }
     }
 
+    private func showEditorMenu() {
+        let menu = NSMenu()
+        for editor in EditorStore.shared.editors {
+            let item = NSMenuItem(title: editor.name, action: #selector(EditorMenuTarget.selectEditor(_:)), keyEquivalent: "")
+            item.state = editor.id == project.editorId ? .on : .off
+            item.representedObject = EditorMenuAction(editorId: editor.id, projectId: project.id, store: projectStore)
+            item.target = EditorMenuTarget.shared
+            menu.addItem(item)
+        }
+        menu.popUp(positioning: nil, at: NSEvent.mouseLocation, in: nil)
+    }
+
     private func confirmDelete() {
         let alert = NSAlert()
         alert.messageText = "Delete \"\(project.name)\"?"
@@ -173,5 +190,19 @@ struct ProjectRowView: View {
                 projectStore.setGroup(project, group: newGroup)
             }
         }
+    }
+}
+
+private struct EditorMenuAction {
+    let editorId: UUID
+    let projectId: UUID
+    let store: ProjectStore
+}
+
+private class EditorMenuTarget: NSObject {
+    static let shared = EditorMenuTarget()
+    @objc func selectEditor(_ sender: NSMenuItem) {
+        guard let action = sender.representedObject as? EditorMenuAction else { return }
+        action.store.mutateProject(action.projectId) { $0.editorId = action.editorId }
     }
 }

@@ -201,7 +201,7 @@ final class ProjectStore: ObservableObject {
         }
     }
 
-    private func mutateProject(_ id: UUID, _ body: (inout RemoteProject) -> Void) {
+    func mutateProject(_ id: UUID, _ body: (inout RemoteProject) -> Void) {
         if let idx = projects.firstIndex(where: { $0.id == id }) {
             body(&projects[idx])
         }

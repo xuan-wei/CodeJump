@@ -9,8 +9,8 @@
 	<key>CFBundleDisplayName</key>
 	<string>CodeJump</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>5</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.3</string>
+	<string>1.0.4</string>
 </dict>
 </plist>
