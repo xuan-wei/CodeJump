@@ -10,8 +10,10 @@
 		00BB914E568BFCAC225E6F38 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D209B88FFEEF6691BBB2D7 /* UpdateChecker.swift */; };
 		09A86A15A05F1B4730BC12AD /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ACE4B090FEB5FC0879EDEBD /* WindowManager.swift */; };
 		0FCE5492AF0C86F7EC54F3E8 /* HostPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A30E6DCDC47D1094BFDC9 /* HostPickerView.swift */; };
+		1149742892DC094BF9A06051 /* ShellEnvironmentResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAFE3765A76829255255149 /* ShellEnvironmentResolverTests.swift */; };
 		18219F07A9D9B6F9BA9CAAF4 /* CodeJumpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11207CE61BA3B769C4177815 /* CodeJumpApp.swift */; };
 		1CD5C518BAC419C18DB91B03 /* ShellExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C491D74D738FBDDB05F9CCF3 /* ShellExecutor.swift */; };
+		1E6B8E19B56975517F23892D /* ShellEnvironmentResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46229E381F6EF59198080320 /* ShellEnvironmentResolver.swift */; };
 		23665C903096675949A40F1E /* ProjectRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85CA4A05BF50A6BFFD2DEA0 /* ProjectRowView.swift */; };
 		247571A80B79C54B413C1F88 /* SSHConfigParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BEAE3690656189F412F9864 /* SSHConfigParser.swift */; };
 		2982DCE9FD51FCFE97BD932E /* RemoteProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1857744F870C1EDD9C4F6D /* RemoteProject.swift */; };
@@ -21,9 +23,20 @@
 		5205939300A14898A8158C4F /* MainPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7243335777466B470C5617 /* MainPanelView.swift */; };
 		9F5EBBF0939331B0CB2380A3 /* PanelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6287AF3989D6A5F709BA16F1 /* PanelManager.swift */; };
 		AD902FFBF3AC5AA8CBA0414B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C93712BE87A74212567607AA /* Assets.xcassets */; };
+		B5889A15FFDB422F2C78FE87 /* ShellExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D7B478119302C8892B957C /* ShellExecutorTests.swift */; };
 		DA3A43C8B178559BC9493C50 /* SSHHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DDB1FDF3615930CDC5EE01 /* SSHHost.swift */; };
 		EA6F263DF2AD63B2116ADBF9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968541B5D5E6A4424985B8F /* SettingsView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CA7F9AD7F0F4C15A77F63F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D3E8B70EB227F9540260BFDD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8903461F0D308ADBE97D1414;
+			remoteInfo = CodeJump;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0F1857744F870C1EDD9C4F6D /* RemoteProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteProject.swift; sourceTree = "<group>"; };
@@ -34,9 +47,12 @@
 		2D7243335777466B470C5617 /* MainPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPanelView.swift; sourceTree = "<group>"; };
 		33EEBB4AE1F9771F75F89956 /* Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Editor.swift; sourceTree = "<group>"; };
 		3AA5AF30019F8F38D1D06CBA /* SSHConfigFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHConfigFile.swift; sourceTree = "<group>"; };
+		46229E381F6EF59198080320 /* ShellEnvironmentResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellEnvironmentResolver.swift; sourceTree = "<group>"; };
 		4ACE4B090FEB5FC0879EDEBD /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		4BEAE3690656189F412F9864 /* SSHConfigParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHConfigParser.swift; sourceTree = "<group>"; };
+		583EA9480566B46ACCB77899 /* CodeJumpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CodeJumpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6287AF3989D6A5F709BA16F1 /* PanelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelManager.swift; sourceTree = "<group>"; };
+		72D7B478119302C8892B957C /* ShellExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellExecutorTests.swift; sourceTree = "<group>"; };
 		847A24CEC0E31E254E57F777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9968541B5D5E6A4424985B8F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B0D209B88FFEEF6691BBB2D7 /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
@@ -44,10 +60,20 @@
 		C491D74D738FBDDB05F9CCF3 /* ShellExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellExecutor.swift; sourceTree = "<group>"; };
 		C85CA4A05BF50A6BFFD2DEA0 /* ProjectRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectRowView.swift; sourceTree = "<group>"; };
 		C93712BE87A74212567607AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DDAFE3765A76829255255149 /* ShellEnvironmentResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellEnvironmentResolverTests.swift; sourceTree = "<group>"; };
 		EC7F86CF2679EC8573274720 /* CodeJump.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CodeJump.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		09A31BE99D0247FD00EDFB10 /* CodeJumpTests */ = {
+			isa = PBXGroup;
+			children = (
+				DDAFE3765A76829255255149 /* ShellEnvironmentResolverTests.swift */,
+				72D7B478119302C8892B957C /* ShellExecutorTests.swift */,
+			);
+			path = CodeJumpTests;
+			sourceTree = "<group>";
+		};
 		43A7AA171D65D231E2FEA396 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +88,7 @@
 		7A9F5E7AD563911D98E45866 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				46229E381F6EF59198080320 /* ShellEnvironmentResolver.swift */,
 				C491D74D738FBDDB05F9CCF3 /* ShellExecutor.swift */,
 				4BEAE3690656189F412F9864 /* SSHConfigParser.swift */,
 				B0D209B88FFEEF6691BBB2D7 /* UpdateChecker.swift */,
@@ -73,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				D22AB257E3EBE192927E18A9 /* CodeJump */,
+				09A31BE99D0247FD00EDFB10 /* CodeJumpTests */,
 				A9942C1B62DE0A92E1955F80 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -81,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				1FEA920F4DB70FABEF729B67 /* CodeJump.app */,
+				583EA9480566B46ACCB77899 /* CodeJumpTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,6 +153,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		05BA07775928A37371F4DF4E /* CodeJumpTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71B5C09E5F2C42154DDF125A /* Build configuration list for PBXNativeTarget "CodeJumpTests" */;
+			buildPhases = (
+				2174D20CF88A6A2330C925B8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3E679088393610F14620CA82 /* PBXTargetDependency */,
+			);
+			name = CodeJumpTests;
+			packageProductDependencies = (
+			);
+			productName = CodeJumpTests;
+			productReference = 583EA9480566B46ACCB77899 /* CodeJumpTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		8903461F0D308ADBE97D1414 /* CodeJump */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6B0A68C3F655050BB725F69D /* Build configuration list for PBXNativeTarget "CodeJump" */;
@@ -151,6 +198,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					05BA07775928A37371F4DF4E = {
+						DevelopmentTeam = "";
+					};
 					8903461F0D308ADBE97D1414 = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Manual;
@@ -172,6 +222,7 @@
 			projectRoot = "";
 			targets = (
 				8903461F0D308ADBE97D1414 /* CodeJump */,
+				05BA07775928A37371F4DF4E /* CodeJumpTests */,
 			);
 		};
 /* End PBXProject section */
@@ -188,6 +239,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2174D20CF88A6A2330C925B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1149742892DC094BF9A06051 /* ShellEnvironmentResolverTests.swift in Sources */,
+				B5889A15FFDB422F2C78FE87 /* ShellExecutorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA5DAD3F9CD88813E53780B2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -204,6 +264,7 @@
 				247571A80B79C54B413C1F88 /* SSHConfigParser.swift in Sources */,
 				DA3A43C8B178559BC9493C50 /* SSHHost.swift in Sources */,
 				EA6F263DF2AD63B2116ADBF9 /* SettingsView.swift in Sources */,
+				1E6B8E19B56975517F23892D /* ShellEnvironmentResolver.swift in Sources */,
 				1CD5C518BAC419C18DB91B03 /* ShellExecutor.swift in Sources */,
 				00BB914E568BFCAC225E6F38 /* UpdateChecker.swift in Sources */,
 				09A86A15A05F1B4730BC12AD /* WindowManager.swift in Sources */,
@@ -211,6 +272,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3E679088393610F14620CA82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8903461F0D308ADBE97D1414 /* CodeJump */;
+			targetProxy = CA7F9AD7F0F4C15A77F63F3F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2902FC9180068C2D82E85ED9 /* Debug */ = {
@@ -317,6 +386,25 @@
 			};
 			name = Release;
 		};
+		AD2CD9E7157E6CE7B6B73614 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.codejump.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CodeJump.app/Contents/MacOS/CodeJump";
+			};
+			name = Debug;
+		};
 		B41612C4BC41D21008E29515 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -374,6 +462,25 @@
 			};
 			name = Release;
 		};
+		D16C39803BC32446A56BD6C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.codejump.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CodeJump.app/Contents/MacOS/CodeJump";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -382,6 +489,15 @@
 			buildConfigurations = (
 				7707553EC4A2885E85668BD7 /* Debug */,
 				95684CA6BEF458B2C812088B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		71B5C09E5F2C42154DDF125A /* Build configuration list for PBXNativeTarget "CodeJumpTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD2CD9E7157E6CE7B6B73614 /* Debug */,
+				D16C39803BC32446A56BD6C0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

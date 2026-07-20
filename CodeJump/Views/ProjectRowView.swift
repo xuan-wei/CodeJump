@@ -4,9 +4,12 @@ struct ProjectRowView: View {
     let project: RemoteProject
     @EnvironmentObject var projectStore: ProjectStore
     @State private var isHovering = false
+    @State private var isOpening = false
 
     var body: some View {
-        Button(action: openProject) {
+        Button {
+            Task { await openProject() }
+        } label: {
             HStack(spacing: 10) {
                 ZStack {
                     Image(systemName: project.editor.iconName)
@@ -83,6 +86,7 @@ struct ProjectRowView: View {
             .opacity(project.isHidden ? 0.5 : 1.0)
         }
         .buttonStyle(.plain)
+        .disabled(isOpening)
         .onHover { isHovering = $0 }
         .contextMenu {
             Button(project.isFavorite ? "Unfavorite" : "Favorite") {
@@ -111,8 +115,13 @@ struct ProjectRowView: View {
         }
     }
 
-    private func openProject() {
-        let result = ShellExecutor.openRemoteProject(project)
+    @MainActor
+    private func openProject() async {
+        guard !isOpening else { return }
+        isOpening = true
+        defer { isOpening = false }
+
+        let result = await ShellExecutor.openRemoteProject(project)
         if result.success {
             projectStore.recordUsage(project)
             PanelManager.shared.hide()

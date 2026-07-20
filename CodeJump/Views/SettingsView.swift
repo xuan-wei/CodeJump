@@ -9,6 +9,7 @@ struct SettingsView: View {
     @ObservedObject private var configStore = SSHConfigStore.shared
     @ObservedObject private var updateChecker = UpdateChecker.shared
     @ObservedObject private var projectStore = ProjectStore.shared
+    @ObservedObject private var shellEnvironment = ShellEnvironmentResolver.shared
     @State private var selectedTab = 0
 
     var body: some View {
@@ -40,6 +41,57 @@ struct SettingsView: View {
                             launchAtLogin = SMAppService.mainApp.status == .enabled
                         }
                     }
+            }
+
+            Section("Shell Environment") {
+                HStack {
+                    Text("Shell")
+                    Spacer()
+                    Text(shellEnvironment.resolution?.shellPath ?? (shellEnvironment.isResolving ? "Detecting…" : "Unavailable"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
+
+                HStack {
+                    Text("Source")
+                    Spacer()
+                    if shellEnvironment.isResolving {
+                        ProgressView().controlSize(.small)
+                    }
+                    Text(shellEnvironment.resolution?.source.label ?? "Not detected")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                if let resolution = shellEnvironment.resolution {
+                    HStack(alignment: .top) {
+                        Text("PATH")
+                        Spacer()
+                        Text(resolution.pathEntries.joined(separator: ":"))
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(3)
+                            .truncationMode(.middle)
+                            .textSelection(.enabled)
+                            .help(resolution.pathEntries.joined(separator: ":"))
+                            .frame(maxWidth: 360, alignment: .trailing)
+                    }
+
+                    if let issue = resolution.issue {
+                        Label(issue.displayMessage, systemImage: "exclamationmark.triangle")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                    }
+                }
+
+                HStack {
+                    Spacer()
+                    Button("Refresh") { shellEnvironment.refresh() }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .disabled(shellEnvironment.isResolving)
+                }
             }
 
             Section("About") {

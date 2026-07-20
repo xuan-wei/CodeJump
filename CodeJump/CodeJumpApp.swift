@@ -25,6 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             button.target = self
         }
         panelManager.setStatusItem(statusItem)
+        ShellEnvironmentResolver.shared.warmUp()
     }
 
     @objc private func statusItemClicked(_ sender: NSStatusBarButton) {

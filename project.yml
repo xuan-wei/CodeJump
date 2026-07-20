@@ -32,3 +32,17 @@ targets:
       properties:
         com.apple.security.app-sandbox: false
         com.apple.security.network.client: true
+
+  CodeJumpTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - CodeJumpTests
+    dependencies:
+      - target: CodeJump
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.codejump.tests
+        GENERATE_INFOPLIST_FILE: true
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: false
